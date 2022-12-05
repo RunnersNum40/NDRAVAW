@@ -1,0 +1,9 @@
+{
+  "playlist": {
+    "ps": [3],
+    "dur": 1000,
+    "transition": 5,
+    "repeat": 0,
+    "end": 3
+  }
+}
