@@ -37,33 +37,6 @@ def send_json(data: dict, url: str = WLED_URL) -> object:
     return r
 
 
-def pins_high(pins: List[int], setup: bool = False) -> int:
-    """Return the number of pins that are HIGH from a list of pins.
-
-    Args:
-        pins: Pin numbers to check
-        setup: Setup the pin before measuring with GPIO.setup(pin)
-    Returns:
-        Number of pins that are HIGH
-    """
-    if setup:
-        for pin in pins:
-            # Setup the pins with a pulldown resistor
-            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    return [GPIO.input(pin) for pin in pins]
-
-
-def json_str(data: dict) -> str:
-    """Convert a json dict to a string.
-
-    Args:
-        data: Dictionary of json data
-    Returns:
-        String encoding of data
-    """
-    return json.dumps(data, ensure_ascii=True).encode("utf-8")
-
-
 class PressurePlate:
     def __init__(self, pin):
         self.pin = pin
