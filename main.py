@@ -6,12 +6,12 @@ from led import Event
 
 # time.sleep(10)
 
-try:
-    plate_pins = (23, 24)
-    plate_files = ("states/0p.json", "states/1p.json", "states/2p.json")
-    event = Event(plate_pins, plate_files, cache_data=True, logging_file_name="logs/log.csv")
-    event.main_loop()
-except Exception as e:
-    print(e)
-    with open("/home/pi/error_log.txt", "w") as file:
-        file.write(str(e))
+while True:
+    try:
+        plate_pins = (25, 24)
+        plate_files = ("states/0p.json", "states/1p.json", "states/2p.json")
+        event = Event(plate_pins, plate_files, cache_data=True)
+        event.main_loop()
+    except Exception as e:
+        print(e)
+        time.sleep(5)

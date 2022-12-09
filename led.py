@@ -50,19 +50,14 @@ class PressurePlate:
 
 class Event:
     """An event for the National Day of Rememberance and Action on Violence Against Women"""
-    def __init__(self, plate_pins: List[int], plate_files: List[str], cache_data: bool = True, logging_file_name: str = None) -> None:
+    def __init__(self, plate_pins: List[int], plate_files: List[str], cache_data: bool = True) -> None:
         # Setup all the pins
         for pin in plate_pins:
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        # Add the headers to the logging file
-        if logging_file_name is not None:
-            with open(script_path+logging_file_name, "w") as logging_file:
-                logging_file.write(f"datetime,{','.join(map(str, plate_pins))}\n")
         # Store object parameters
         self.plates = [PressurePlate(pin) for pin in plate_pins]
         self.plate_files = plate_files
         self.cache_data = cache_data
-        self.logging_file_name = logging_file_name
 
         self.plate_tracker = threading.Thread(target=self.plate_reader, args=(1000,))
         self.plate_tracker.start()
@@ -79,18 +74,18 @@ class Event:
             # Check if the number of plates activaited has changed
             num_plates = sum(plates)
             if num_plates != sum(old_plates):
+                print(plates)
                 if self.cache_data:
                     r = send_json(plate_data[num_plates])
                 else:
                     r = send_json(read_json(self.plate_files[num_plates]))
+                # Wait to avoid flickering if broken
+                time.sleep(1)
             # Check if the state has changed
             if plates != old_plates:
-                # Log the time and state of all pins
-                if self.logging_file_name is not None:
-                    with open(script_path+self.logging_file_name, "a") as logging_file:
-                        logging_file.write(f"{datetime.now()},{','.join(map(str, plates))}\n")
                 # Save the old state
                 old_plates = plates
+<<<<<<< Updated upstream
                 # Wait to avoid flickering if broken
                 time.sleep(1)
             # Find the current state of the event
@@ -117,6 +112,10 @@ class Event:
     def read_plate_states(self):
         """Return the state of all the plates"""
         return [plate.state() for plate in self.plates]
+=======
+            # Find the current state
+            plates = [plate.state() for plate in self.plates]
+>>>>>>> Stashed changes
 
     def __del__(self):
         # Finish with the gpio pins
