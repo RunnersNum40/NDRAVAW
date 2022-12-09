@@ -85,7 +85,6 @@ class Event:
             if plates != old_plates:
                 # Save the old state
                 old_plates = plates
-<<<<<<< Updated upstream
                 # Wait to avoid flickering if broken
                 time.sleep(1)
             # Find the current state of the event
@@ -112,10 +111,8 @@ class Event:
     def read_plate_states(self):
         """Return the state of all the plates"""
         return [plate.state() for plate in self.plates]
-=======
             # Find the current state
             plates = [plate.state() for plate in self.plates]
->>>>>>> Stashed changes
 
     def __del__(self):
         # Finish with the gpio pins
